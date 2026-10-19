@@ -1,0 +1,185 @@
+/**
+ * This week's theme only — an observatory almanac, not sci-fi clip art.
+ * Everything here is scoped under [data-theme='space'], set once on <html> in
+ * index.html, so it is inert everywhere else and a two-line revert for the
+ * next edition: drop this <link> and the attribute goes back to "day".
+ *
+ * tokens.css already redefines the semantic palette for this theme, so every
+ * shared component (buttons, fields, cards, the ambient wash) is correct for
+ * free. What's here is only the handful of places register.css reaches past
+ * those tokens for a literal ink/ivory value, plus the theme's one signature:
+ * the step rail reads as a line between stars, and lights up as you go.
+ */
+
+/* --- the starfield ----------------------------------------------------------
+   Replaces the shared paper-tooth grain (base.css, body::after) for this page
+   only. A few dozen points, not a pattern — the same restraint DESIGN.md asks
+   of the ambient colour wash applies here too. */
+
+[data-theme='space'] body::after {
+  opacity: 0.7;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cg fill='%23F3EFE4'%3E%3Ccircle cx='23' cy='48' r='0.9' opacity='0.8'/%3E%3Ccircle cx='77' cy='15' r='0.6' opacity='0.5'/%3E%3Ccircle cx='142' cy='63' r='1.3' opacity='0.9'/%3E%3Ccircle cx='198' cy='22' r='0.7' opacity='0.4'/%3E%3Ccircle cx='255' cy='88' r='1.0' opacity='0.7'/%3E%3Ccircle cx='312' cy='40' r='0.8' opacity='0.6'/%3E%3Ccircle cx='361' cy='120' r='1.4' opacity='0.85'/%3E%3Ccircle cx='28' cy='140' r='0.6' opacity='0.45'/%3E%3Ccircle cx='95' cy='175' r='1.1' opacity='0.75'/%3E%3Ccircle cx='160' cy='150' r='0.7' opacity='0.5'/%3E%3Ccircle cx='220' cy='195' r='1.5' opacity='0.9'/%3E%3Ccircle cx='280' cy='160' r='0.9' opacity='0.6'/%3E%3Ccircle cx='340' cy='210' r='0.6' opacity='0.4'/%3E%3Ccircle cx='15' cy='230' r='1.2' opacity='0.8'/%3E%3Ccircle cx='70' cy='260' r='0.8' opacity='0.55'/%3E%3Ccircle cx='130' cy='290' r='1.0' opacity='0.7'/%3E%3Ccircle cx='190' cy='255' r='0.6' opacity='0.45'/%3E%3Ccircle cx='245' cy='300' r='1.3' opacity='0.85'/%3E%3Ccircle cx='300' cy='270' r='0.7' opacity='0.5'/%3E%3Ccircle cx='355' cy='320' r='0.9' opacity='0.65'/%3E%3Ccircle cx='50' cy='340' r='0.6' opacity='0.4'/%3E%3Ccircle cx='110' cy='370' r='1.1' opacity='0.75'/%3E%3Ccircle cx='175' cy='355' r='0.8' opacity='0.55'/%3E%3Ccircle cx='235' cy='380' r='0.6' opacity='0.45'/%3E%3Ccircle cx='290' cy='350' r='1.4' opacity='0.9'/%3E%3Ccircle cx='350' cy='390' r='0.7' opacity='0.5'/%3E%3Ccircle cx='10' cy='80' r='0.5' opacity='0.35'/%3E%3Ccircle cx='372' cy='62' r='0.6' opacity='0.4'/%3E%3Ccircle cx='5' cy='300' r='0.7' opacity='0.5'/%3E%3Ccircle cx='385' cy='250' r='0.9' opacity='0.6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 400px 400px;
+  background-repeat: repeat;
+}
+
+/* --- the two dark bands: masthead and ticket head ---------------------------
+   These are pinned to literal ink/ivory in register.css by design — the brand
+   wants them dark on every theme. On a page that is already night-indigo that
+   reads as no band at all, so here they go one step darker instead, with the
+   glow retinted from terracotta/green to comet/nebula. */
+
+[data-theme='space'] .masthead,
+[data-theme='space'] .ticket__head {
+  background: var(--void-sunk);
+  color: var(--star);
+}
+
+[data-theme='space'] .masthead::before {
+  background:
+    radial-gradient(36vw 36vw at 10% 6%, rgba(255, 106, 61, 0.22), transparent 62%),
+    radial-gradient(42vw 42vw at 92% 96%, rgba(91, 79, 207, 0.16), transparent 66%);
+}
+
+[data-theme='space'] .ticket__head::before {
+  background: radial-gradient(22vw 22vw at 16% 0%, rgba(255, 106, 61, 0.26), transparent 60%);
+}
+
+[data-theme='space'] .masthead__numeral {
+  -webkit-text-stroke: 1px rgba(243, 239, 228, 0.16);
+}
+
+[data-theme='space'] .masthead .eyebrow,
+[data-theme='space'] .ticket__edition {
+  color: var(--comet);
+}
+
+[data-theme='space'] .masthead__tagline,
+[data-theme='space'] .ticket__when,
+[data-theme='space'] .status-line {
+  color: var(--star-dim);
+}
+
+[data-theme='space'] .facts .label {
+  color: var(--star-faint);
+}
+
+[data-theme='space'] .status-line {
+  border-color: var(--void-hair);
+}
+
+[data-theme='space'] .status-line__dot {
+  background: var(--star-faint);
+}
+
+[data-theme='space'] .status-line[data-state='open'] .status-line__dot {
+  background: var(--green-bright);
+}
+
+[data-theme='space'] .status-line[data-state='closed'] .status-line__dot {
+  background: var(--comet);
+}
+
+[data-theme='space'] .ticket__dot {
+  color: var(--star-faint);
+}
+
+[data-theme='space'] .facts {
+  border-top-color: var(--void-hair);
+}
+
+/* --- the stub -----------------------------------------------------------
+   The hatching in register.css is a near-invisible dark-on-paper texture;
+   dark-on-void would vanish entirely, so it is retinted as faint starlight —
+   the same idea, the other way round. */
+
+[data-theme='space'] .ticket__stub {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 7px,
+    rgba(243, 239, 228, 0.035) 7px 14px
+  );
+}
+
+[data-theme='space'] .drop[data-state='filled'] {
+  border-color: var(--void-hair);
+  background: var(--void-sunk);
+}
+
+[data-theme='space'] .drop[data-state='filled'] .drop__text {
+  color: var(--star);
+}
+
+[data-theme='space'] .drop[data-state='filled'] .drop__meta {
+  color: var(--star-dim);
+}
+
+/* A QR code needs real contrast to scan, so its own black-on-white stays —
+   it just reads, appropriately, as one bright instrument reading against the
+   night rather than something to blend in. Framed a little more deliberately
+   for it: a dashed ring with the faint hum of a fix once one is locked in. */
+
+[data-theme='space'] .ticket__qr,
+[data-theme='space'] .pay__qr img {
+  border-color: var(--void-hair);
+}
+
+[data-theme='space'] .ticket[data-state='issued'] .ticket__qr {
+  border-color: var(--comet-dim);
+  box-shadow: 0 0 0 1px rgba(255, 106, 61, 0.18), 0 0 22px rgba(255, 106, 61, 0.22);
+}
+
+/* base.css's [data-theme='night'] override is the pattern to match: on a dark
+   surface the primary action inverts to a light button, dark text, rather
+   than staying ink-on-ink and vanishing into the page. */
+[data-theme='space'] .btn--primary {
+  background: var(--star);
+  color: var(--void);
+}
+
+[data-theme='space'] .btn--primary:hover {
+  background: #ffffff;
+}
+
+[data-theme='space'] .btn--primary::after {
+  background: linear-gradient(100deg, transparent 40%, rgba(11, 14, 26, 0.14) 50%, transparent 60%);
+}
+
+/* --- the signature: a rail between stars -------------------------------------
+   Numbered because the sequence is real (register.css says so already); here
+   the rail is unlit until a step is reached, then it takes the light and
+   keeps it — the same reveal register.js already drives, carrying one more
+   meaning than it did before. */
+
+[data-theme='space'] .step::before {
+  transition: background-color var(--slow) var(--ease), box-shadow var(--slow) var(--ease);
+}
+
+[data-theme='space'] .step[data-reveal='in']::before {
+  background-color: var(--comet-dim);
+  box-shadow: 0 0 10px 0 rgba(255, 106, 61, 0.45);
+}
+
+[data-theme='space'] .step__index span {
+  transition: color var(--slow) var(--ease), border-color var(--slow) var(--ease),
+    box-shadow var(--slow) var(--ease);
+}
+
+[data-theme='space'] .step[data-reveal='in'] .step__index span {
+  border-color: var(--comet);
+  color: var(--comet);
+  box-shadow: 0 0 0 3px rgba(255, 106, 61, 0.14), 0 0 14px rgba(255, 106, 61, 0.4);
+}
+
+[data-theme='space'] .step:focus-within .step__index span {
+  border-color: var(--comet);
+  color: var(--comet);
+}
+
+/* Reduced motion still gets the lit state — just without the transition. */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme='space'] .step::before,
+  [data-theme='space'] .step__index span {
+    transition: none;
+  }
+}

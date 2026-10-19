@@ -1,0 +1,296 @@
+/* The admin page: drafting an event and its form questions. Day surface —
+   this is read closely and typed into, not glanced at across a room. */
+
+[data-theme='day'] .dash-head,
+[data-theme='day'] .dash {
+  background: var(--bg, var(--ivory));
+}
+
+.admin-back {
+  color: var(--ink-faint);
+  text-decoration: none;
+}
+
+.admin-back:hover {
+  color: var(--accent);
+}
+
+.admin-gate {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--s-7) 0;
+  text-align: center;
+}
+
+.admin-gate .btn {
+  margin-top: var(--s-5);
+}
+
+.admin-section {
+  max-width: 640px;
+  margin: 0 auto var(--s-9);
+  padding-top: var(--s-7);
+  border-top: var(--hairline) solid var(--hair);
+}
+
+.admin-section:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.admin-section--danger {
+  border-top-color: var(--bad);
+}
+
+.admin-hint {
+  margin-top: var(--s-2);
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+}
+
+.admin-form {
+  margin-top: var(--s-5);
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 var(--s-5);
+}
+
+.admin-grid--3 {
+  grid-template-columns: 2fr 1fr 1fr;
+  align-items: end;
+}
+
+@media (max-width: 640px) {
+  .admin-grid,
+  .admin-grid--3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-actions {
+  margin-top: var(--s-6);
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+
+.admin-status {
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+}
+
+.admin-status[data-tone='ok'] {
+  color: var(--ok);
+}
+
+.admin-status[data-tone='error'] {
+  color: var(--bad);
+}
+
+/* --- form questions --------------------------------------------------------- */
+
+.admin-fields {
+  margin-top: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+
+.admin-field-row {
+  padding: var(--s-4);
+  background: var(--surface);
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius-lg);
+}
+
+.admin-field-row__required {
+  padding-bottom: 12px;
+}
+
+.f-options-field {
+  margin-top: var(--s-3);
+}
+
+.admin-field-row .f-remove {
+  margin-top: var(--s-3);
+}
+
+#add-field {
+  margin-top: var(--s-2);
+}
+
+/* --- appearance editor ------------------------------------------------------ */
+
+.theme-tabs {
+  display: flex;
+  gap: var(--s-2);
+  margin-top: var(--s-5);
+  flex-wrap: wrap;
+}
+
+.theme-tab {
+  font-family: var(--font-body);
+  font-size: var(--t-s);
+  padding: 10px 16px;
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.theme-tab--active {
+  border-color: var(--accent);
+  color: var(--ink);
+  background: var(--accent-wash);
+}
+
+.theme-editor {
+  margin-top: var(--s-5);
+}
+
+.theme-panel {
+  padding: var(--s-5);
+  background: var(--surface);
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius-lg);
+}
+
+.theme-preview {
+  margin-top: var(--s-5);
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.theme-preview__bar {
+  padding: var(--s-4) var(--s-5);
+  background: var(--header-bg, var(--ink-900));
+  color: var(--header-text, var(--ivory));
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-l);
+}
+
+.theme-preview__body {
+  padding: var(--s-5);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+.theme-preview__body p {
+  margin: 0 0 var(--s-4);
+  color: var(--ink-muted);
+  font-size: var(--t-s);
+}
+
+.theme-preview__body .btn {
+  font-size: var(--t-s);
+  padding: 12px 20px;
+}
+
+.theme-color-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-3);
+}
+
+.theme-color-row input[type='color'] {
+  width: 44px;
+  height: 36px;
+  padding: 2px;
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--surface);
+}
+
+.theme-color-row .label {
+  flex: 1;
+  margin: 0;
+}
+
+.theme-color-row input[type='text'] {
+  width: 7.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  padding: 6px 8px;
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.theme-subhead {
+  font-family: var(--font-display);
+  font-size: var(--t-m);
+  font-weight: var(--w-medium);
+  margin: var(--s-5) 0 var(--s-2);
+}
+
+.theme-subhead:first-child {
+  margin-top: 0;
+}
+
+.theme-bg-fields[hidden] {
+  display: none;
+}
+
+.field--inline {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+}
+
+.field--inline input[type='range'] {
+  flex: 1;
+}
+
+.field--inline output {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+.theme-upload {
+  margin: var(--s-4) 0;
+}
+
+.theme-upload__drop {
+  border: 2px dashed var(--hair);
+  border-radius: var(--radius-lg);
+  padding: var(--s-6) var(--s-5);
+  text-align: center;
+  font-size: var(--t-s);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+
+.theme-upload__drop:hover,
+.theme-upload__drop[data-drag='true'] {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.theme-upload__preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  margin-top: var(--s-4);
+  border: var(--hairline) solid var(--hair);
+}
+
+.theme-upload__meta {
+  margin-top: var(--s-2);
+  min-height: 1.2em;
+}

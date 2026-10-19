@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live — OS Days</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#141210">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/dash.css">
+</head>
+<body>
+
+<header class="dash-head">
+  <div class="dash-head__inner">
+    <div>
+      <p class="eyebrow">OS Days &nbsp;/&nbsp; <span data-bind="edition">04</span></p>
+      <h1 class="dash-head__title" data-bind="name">Open Source Days</h1>
+    </div>
+
+    <div class="dash-head__right">
+      <!-- The venue clock. IST, always, whatever this laptop is set to. -->
+      <p class="clock">
+        <time class="clock__time" id="clock">&ndash;&ndash;:&ndash;&ndash;</time>
+        <span class="label clock__zone">IST</span>
+      </p>
+      <p class="live" id="live" data-state="loading">
+        <span class="live__dot" aria-hidden="true"></span>
+        <span id="live-text">Connecting</span>
+      </p>
+      <a class="btn btn--quiet btn--sm" id="admin-link" href="admin.html" hidden>Edit event</a>
+      <button type="button" class="btn btn--quiet btn--sm" id="staff-toggle">Sign in as staff</button>
+    </div>
+  </div>
+</header>
+
+<main class="dash">
+
+  <!-- Tickets are issued on submission, so the only thing that can still leave
+       someone empty-handed is the email not going out. Staff only. -->
+  <aside class="alarm" id="alarm" hidden role="status">
+    <p class="alarm__title">Ticket emails are not going out</p>
+    <p class="alarm__detail" id="alarm-detail"></p>
+    <p class="alarm__fix">Almost always the daily Gmail limit. It retries every 10 minutes; those tickets are valid and their owners already have them on screen.</p>
+  </aside>
+
+  <!-- One number matters at the door: how many people are in the room. -->
+  <section class="headline" aria-labelledby="headline-label">
+    <p class="label" id="headline-label">In the room</p>
+    <p class="headline__number display"><output id="stat-in">0</output></p>
+    <p class="headline__of mono">of <output id="stat-ticketed">0</output> registered &nbsp;/&nbsp; <output id="stat-pct">0</output>% arrived</p>
+
+    <!-- One mark per person registered. The room filling up, at a glance. -->
+    <div class="arrivals" id="arrivals" role="img" aria-label="Arrivals"></div>
+  </section>
+
+  <section class="tiles" aria-label="Status">
+    <article class="tile">
+      <p class="label">Registered</p>
+      <p class="tile__value mono"><output id="stat-registered">0</output></p>
+      <p class="tile__note">tickets issued</p>
+    </article>
+
+    <article class="tile">
+      <p class="label">Yet to arrive</p>
+      <p class="tile__value mono"><output id="stat-expected">0</output></p>
+      <p class="tile__note">registered, not through the door</p>
+    </article>
+
+    <article class="tile" data-tone="warn" id="tile-undelivered" hidden>
+      <p class="label">Email stuck</p>
+      <p class="tile__value mono"><output id="stat-undelivered">0</output></p>
+      <p class="tile__note">issued but not delivered</p>
+    </article>
+
+    <!-- The switch that stops the form taking responses. Nothing else changes:
+         the door, the tickets and these numbers all carry on. -->
+    <article class="tile tile--switch" id="tile-registration">
+      <p class="label">Registration</p>
+      <p class="tile__value" id="reg-state">&ndash;</p>
+      <p class="tile__note" id="reg-note"></p>
+      <button type="button" class="btn btn--quiet btn--sm" id="reg-toggle" hidden>Close the form</button>
+    </article>
+  </section>
+
+  <div class="split">
+    <section class="feed" aria-labelledby="feed-label">
+      <h2 class="section-title" id="feed-label">Arrivals</h2>
+      <ol class="feed__list" id="feed"></ol>
+      <p class="empty" id="feed-empty">No check-ins yet. Doors at <span data-bind="doorsLabel">5:30 pm</span>.</p>
+    </section>
+
+    <section class="roster" aria-labelledby="roster-label">
+      <div class="roster__head">
+        <h2 class="section-title" id="roster-label">Attendees</h2>
+        <label class="roster__search">
+          <span class="visually-hidden">Search attendees</span>
+          <input type="search" id="roster-search" placeholder="Search name, email or ticket" autocomplete="off">
+        </label>
+      </div>
+      <div class="roster__scroll">
+        <table class="roster__table" id="roster-table" hidden>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">Ticket</th>
+              <th scope="col">Arrived</th>
+            </tr>
+          </thead>
+          <tbody id="roster-body"></tbody>
+        </table>
+        <p class="empty" id="roster-empty">Sign in with the door code to see who has registered.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Staff sign-in -->
+<div class="sheet" id="staff-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="staff-title">
+  <div class="sheet__panel">
+    <h2 class="sheet__title" id="staff-title">Sign in as staff</h2>
+    <p class="sheet__note">Names, emails and payment screenshots stay hidden until this phone proves it is on the door.</p>
+    <form id="staff-form">
+      <label class="field">
+        <span class="label">Door code</span>
+        <input type="text" id="staff-key" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go">
+        <span class="field-error" id="staff-error" role="alert"></span>
+      </label>
+      <div class="sheet__actions">
+        <button type="button" class="btn btn--quiet" id="staff-cancel">Cancel</button>
+        <button type="submit" class="btn btn--primary">Sign in</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/dash.js"></script>
+</body>
+</html>

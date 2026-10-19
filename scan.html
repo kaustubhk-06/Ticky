@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Door — OS Days</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#141210">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/scan.css">
+</head>
+<body class="scan-body">
+
+<!-- Gate: the door code proves this phone belongs to the door, so a leaked QR
+     cannot be burned by whoever saw it first. -->
+<section class="gate" id="gate">
+  <div class="gate__inner">
+    <p class="eyebrow">OS Days &nbsp;/&nbsp; Door</p>
+    <h1 class="display gate__title">Scan tickets</h1>
+    <p class="gate__note">This phone remembers the code until you sign out.</p>
+
+    <form id="gate-form">
+      <label class="field">
+        <span class="label">Door code</span>
+        <input type="text" id="gate-key" autocomplete="off" autocapitalize="characters"
+               spellcheck="false" inputmode="text" enterkeyhint="go" required>
+        <span class="field-error" id="gate-error" role="alert"></span>
+      </label>
+      <button type="submit" class="btn btn--primary btn--block">Start scanning</button>
+    </form>
+  </div>
+</section>
+
+<!-- Scanner -->
+<section class="scanner" id="scanner" hidden>
+  <header class="bar">
+    <div class="bar__left">
+      <p class="eyebrow">Door &nbsp;/&nbsp; <span id="bar-event">OS Days</span></p>
+      <p class="bar__count mono"><output id="bar-in">0</output> in of <output id="bar-ticketed">0</output></p>
+    </div>
+    <div class="bar__right">
+      <button type="button" class="icon-btn" id="toggle-sound" aria-pressed="true" title="Sound on">
+        <span aria-hidden="true">&#9834;</span><span class="visually-hidden">Toggle scan sound</span>
+      </button>
+      <button type="button" class="icon-btn" id="sign-out" title="Sign out of this door">
+        <span aria-hidden="true">&#10005;</span><span class="visually-hidden">Sign out</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="viewport">
+    <div id="reader" class="reader"></div>
+    <div class="reticle" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+      <i class="reticle__sweep"></i>
+    </div>
+    <p class="viewport__hint" id="viewport-hint">Point the camera at the QR on their ticket.</p>
+  </div>
+
+  <div class="manual">
+    <button type="button" class="btn btn--quiet btn--block" id="manual-toggle">Camera not working?</button>
+    <form id="manual-form" hidden>
+      <label class="field">
+        <span class="label">Ticket number</span>
+        <input type="text" id="manual-id" placeholder="OSD-4K7P-92QX" autocomplete="off"
+               autocapitalize="characters" spellcheck="false" enterkeyhint="go">
+      </label>
+      <p class="manual__note">Find it on the dashboard, next to their name.</p>
+      <button type="submit" class="btn btn--primary btn--block">Check this ticket</button>
+    </form>
+  </div>
+</section>
+
+<!-- Verdict: one state, one colour, readable across a dark room. -->
+<div class="verdict" id="verdict" hidden role="alertdialog" aria-live="assertive" aria-labelledby="verdict-headline">
+  <div class="verdict__inner">
+    <p class="label verdict__state" id="verdict-state">Checking</p>
+    <p class="display verdict__headline" id="verdict-headline">&hellip;</p>
+    <p class="verdict__name" id="verdict-name"></p>
+    <p class="verdict__ticket mono" id="verdict-ticket"></p>
+    <p class="verdict__detail" id="verdict-detail"></p>
+    <button type="button" class="btn btn--quiet verdict__next" id="verdict-next">Next ticket</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/scan.js"></script>
+</body>
+</html>

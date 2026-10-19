@@ -1,0 +1,305 @@
+/* Door scanner. Night surface: a volunteer holding a phone in a dim room. */
+
+.scan-body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* --- gate ----------------------------------------------------------------- */
+
+.gate {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--s-7) var(--s-5);
+}
+
+.gate[hidden] {
+  display: none;
+}
+
+.gate__inner {
+  width: 100%;
+  max-width: 340px;
+  animation: rise var(--slow) var(--ease) both;
+}
+
+.gate__title {
+  margin: var(--s-3) 0 0;
+}
+
+.gate__note {
+  color: var(--ink-muted);
+  margin-top: var(--s-3);
+}
+
+.gate .btn {
+  margin-top: var(--s-6);
+}
+
+/* --- bar ------------------------------------------------------------------ */
+
+.scanner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.scanner[hidden] {
+  display: none;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: var(--hairline) solid var(--hair);
+}
+
+.bar__count {
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+  margin-top: var(--s-1);
+}
+
+.bar__count output {
+  color: var(--ink);
+  font-weight: var(--w-medium);
+}
+
+.bar__right {
+  display: flex;
+  gap: var(--s-2);
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: var(--ink-muted);
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius);
+  font-size: var(--t-m);
+  cursor: pointer;
+  transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+
+.icon-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink-muted);
+}
+
+.icon-btn[aria-pressed='false'] {
+  color: var(--ink-faint);
+  opacity: 0.5;
+}
+
+/* --- viewport ------------------------------------------------------------- */
+
+.viewport {
+  position: relative;
+  flex: 1;
+  min-height: 260px;
+  background: var(--surface-sunk);
+  overflow: hidden;
+}
+
+.reader,
+.reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* html5-qrcode injects its own chrome; the page provides the framing instead. */
+.reader img[alt='Info icon'],
+.reader__dashboard_section_csr span,
+#reader__dashboard {
+  display: none !important;
+}
+
+.reticle {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.reticle span {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--accent);
+  border-radius: 2px;
+}
+
+.reticle span:nth-child(1) { top: calc(50% - 112px); left: calc(50% - 112px); border-right: 0; border-bottom: 0; }
+.reticle span:nth-child(2) { top: calc(50% - 112px); right: calc(50% - 112px); border-left: 0; border-bottom: 0; }
+.reticle span:nth-child(3) { bottom: calc(50% - 112px); left: calc(50% - 112px); border-right: 0; border-top: 0; }
+.reticle span:nth-child(4) { bottom: calc(50% - 112px); right: calc(50% - 112px); border-left: 0; border-top: 0; }
+
+/* A line travelling the frame: the one cue that the camera is actually live,
+   which a still picture of a dark room cannot give you. */
+.reticle__sweep {
+  position: absolute;
+  left: calc(50% - 112px);
+  width: 224px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.75;
+  animation: sweep 2.8s var(--ease-soft) infinite;
+}
+
+@keyframes sweep {
+  0%, 100% { transform: translateY(-112px); }
+  50% { transform: translateY(112px); }
+}
+
+.viewport__hint {
+  position: absolute;
+  left: var(--s-5);
+  right: var(--s-5);
+  bottom: var(--s-5);
+  text-align: center;
+  font-size: var(--t-s);
+  color: var(--ink-muted);
+  background: rgba(14, 12, 11, 0.86);
+  border-radius: var(--radius);
+  padding: var(--s-2) var(--s-3);
+}
+
+.viewport__hint[data-tone='error'] {
+  color: var(--bad);
+}
+
+/* --- manual entry --------------------------------------------------------- */
+
+.manual {
+  padding: var(--s-4) var(--s-5) var(--s-5);
+  border-top: var(--hairline) solid var(--hair);
+}
+
+.manual form {
+  margin-top: var(--s-2);
+}
+
+.manual__note {
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+  margin-top: var(--s-3);
+}
+
+.manual .btn--primary {
+  margin-top: var(--s-4);
+}
+
+.manual input {
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--t-l);
+  letter-spacing: var(--track-id);
+}
+
+/* --- verdict --------------------------------------------------------------
+   One screen, one colour, one instruction. Green means let them in; terracotta
+   means do not, and the headline says which kind of no it is. */
+
+.verdict {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: var(--s-7) var(--s-5);
+  text-align: center;
+  background: var(--surface-sunk);
+  color: var(--ink);
+  animation: fade var(--fast) var(--ease) both;
+}
+
+.verdict[hidden] {
+  display: none;
+}
+
+/* The state colour floods from the centre — visible from across a door queue. */
+.verdict::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 44%, var(--flood, transparent) 0%, transparent 70%);
+  opacity: 0.24;
+  animation: flood var(--slow) var(--ease) both;
+}
+
+@keyframes flood {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 0.24; }
+}
+
+.verdict__inner {
+  position: relative;
+  max-width: 390px;
+}
+
+.verdict__state {
+  color: var(--flood, var(--ink-faint));
+}
+
+.verdict__headline {
+  font-family: var(--font-display);
+  font-weight: var(--w-semi);
+  font-size: var(--t-hero);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  margin: var(--s-4) 0 0;
+  color: var(--flood, var(--ink));
+  animation: rise var(--mid) var(--ease) both;
+}
+
+.verdict__name {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-l);
+  margin-top: var(--s-5);
+  overflow-wrap: anywhere;
+}
+
+.verdict__detail {
+  font-family: var(--font-mono);
+  font-size: var(--t-s);
+  color: var(--ink-muted);
+  margin-top: var(--s-3);
+}
+
+.verdict__next {
+  margin-top: var(--s-7);
+  min-width: 190px;
+}
+
+.verdict[data-state='checking'] { --flood: var(--ink-faint); }
+.verdict[data-state='VALID'] { --flood: var(--green-bright); }
+.verdict[data-state='ALREADY_USED'],
+.verdict[data-state='REVOKED'],
+.verdict[data-state='INVALID'],
+.verdict[data-state='UNKNOWN'],
+.verdict[data-state='WRONG_EVENT'],
+.verdict[data-state='ERROR'] { --flood: var(--terra-bright); }
+
+.verdict__ticket:empty {
+  display: none;
+}
+
+.verdict__ticket {
+  font-size: var(--t-s);
+  letter-spacing: var(--track-id);
+  color: var(--ink-faint);
+  margin-top: var(--s-2);
+}

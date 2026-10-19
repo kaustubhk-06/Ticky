@@ -1,0 +1,497 @@
+/* Live dashboard. Night surface: glanceable across a dim room. */
+
+.dash-head {
+  border-bottom: var(--hairline) solid var(--hair);
+  padding: var(--s-5);
+}
+
+.dash-head__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-5);
+  flex-wrap: wrap;
+}
+
+.dash-head__title {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-l);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-top: var(--s-1);
+}
+
+.dash-head__right {
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  flex-wrap: wrap;
+}
+
+.btn--sm {
+  font-size: var(--t-s);
+  font-weight: var(--w-regular);
+  padding: 10px 16px;
+}
+
+/* --- the venue clock ------------------------------------------------------- */
+
+.clock {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+}
+
+.clock__time {
+  font-family: var(--font-mono);
+  font-size: var(--t-l);
+  font-weight: var(--w-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.clock__zone {
+  color: var(--ink-faint);
+}
+
+/* --- live indicator -------------------------------------------------------- */
+
+.live {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.live__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+}
+
+.live[data-state='live'] .live__dot {
+  background: var(--green-bright);
+  animation: blink 3.4s var(--ease-soft) infinite;
+}
+
+.live[data-state='error'] .live__dot {
+  background: var(--terra-bright);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* --- layout ---------------------------------------------------------------- */
+
+.dash {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--s-7) var(--s-5) var(--s-9);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-l);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+}
+
+/* --- delivery alarm --------------------------------------------------------- */
+
+.alarm[hidden] {
+  display: none;
+}
+
+.alarm {
+  border: var(--hairline) solid var(--bad);
+  border-left-width: 3px;
+  border-radius: var(--radius);
+  background: var(--accent-wash);
+  padding: var(--s-4) var(--s-5);
+  margin-bottom: var(--s-7);
+  animation: fade var(--slow) var(--ease) both;
+}
+
+.alarm__title {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-l);
+  letter-spacing: -0.01em;
+  color: var(--bad);
+}
+
+.alarm__detail {
+  font-family: var(--font-mono);
+  font-size: var(--t-s);
+  color: var(--ink);
+  margin-top: var(--s-2);
+}
+
+.alarm__fix {
+  font-size: var(--t-s);
+  color: var(--ink-muted);
+  margin-top: var(--s-2);
+  max-width: var(--measure);
+}
+
+/* --- headline --------------------------------------------------------------
+   One number, at a size you can read from the far side of the door table. */
+
+.headline {
+  padding: var(--s-4) 0 var(--s-7);
+  border-bottom: var(--hairline) solid var(--hair);
+}
+
+.headline__number {
+  font-family: var(--font-display);
+  font-weight: var(--w-semi);
+  font-size: var(--t-hero);
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  margin-top: var(--s-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.headline__of {
+  font-size: var(--t-s);
+  color: var(--ink-muted);
+  margin-top: var(--s-3);
+}
+
+/* One mark per person registered. The row grows with the guest list; nothing is
+   reserved, because nothing was ever counted in advance. */
+.arrivals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: var(--s-6);
+  max-width: 780px;
+}
+
+.arrivals i {
+  width: 10px;
+  height: 24px;
+  border-radius: 1px;
+  background: transparent;
+  border: var(--hairline) solid var(--hair);
+  transition: background var(--slow) var(--ease), border-color var(--slow) var(--ease);
+  animation: fade var(--mid) var(--ease) both;
+}
+
+.arrivals i[data-state='in'] {
+  background: var(--green-bright);
+  border-color: var(--green-bright);
+}
+
+/* --- tiles ----------------------------------------------------------------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--s-5);
+  margin-top: var(--s-7);
+}
+
+.tile {
+  border-top: 2px solid var(--hair);
+  padding-top: var(--s-4);
+}
+
+.tile[hidden] {
+  display: none;
+}
+
+.tile__value {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-xl);
+  line-height: 1.1;
+  margin-top: var(--s-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.tile[data-tone='warn'] {
+  border-top-color: var(--bad);
+}
+
+.tile[data-tone='warn'] .tile__value {
+  color: var(--bad);
+}
+
+.tile__note {
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+  margin-top: var(--s-1);
+}
+
+.tile--switch[data-state='open'] {
+  border-top-color: var(--ok);
+}
+
+.tile--switch[data-state='closed'] {
+  border-top-color: var(--terra-bright);
+}
+
+.tile--switch .btn {
+  margin-top: var(--s-4);
+}
+
+.tile--switch .btn[hidden] {
+  display: none;
+}
+
+/* --- split ----------------------------------------------------------------- */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-7);
+  margin-top: var(--s-8);
+}
+
+@media (min-width: 940px) {
+  .split {
+    grid-template-columns: 330px minmax(0, 1fr);
+    gap: var(--s-8);
+  }
+}
+
+/* --- feed ------------------------------------------------------------------ */
+
+.feed__list {
+  list-style: none;
+  margin: var(--s-3) 0 0;
+  padding: 0;
+}
+
+.feed__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-3) 0;
+  border-bottom: var(--hairline) solid var(--hair);
+  animation: land var(--mid) var(--ease) both;
+}
+
+@keyframes land {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.feed__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feed__at {
+  font-family: var(--font-mono);
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+  flex: 0 0 auto;
+}
+
+.empty {
+  color: var(--ink-faint);
+  font-size: var(--t-s);
+  padding: var(--s-4) 0;
+}
+
+.empty[hidden] {
+  display: none;
+}
+
+/* --- roster ----------------------------------------------------------------- */
+
+.roster__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+
+.roster__search input {
+  font-family: var(--font-body);
+  font-size: var(--t-s);
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-bottom: var(--hairline) solid var(--hair);
+  padding: 9px 2px;
+  min-width: 240px;
+}
+
+.roster__search input:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.roster__search input::placeholder {
+  color: var(--ink-faint);
+}
+
+.roster__scroll {
+  margin-top: var(--s-4);
+  overflow-x: auto;
+}
+
+.roster__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-s);
+}
+
+.roster__table th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 0 var(--s-4) var(--s-3) 0;
+  border-bottom: var(--hairline) solid var(--hair);
+  white-space: nowrap;
+}
+
+.roster__table td {
+  padding: var(--s-3) var(--s-4) var(--s-3) 0;
+  border-bottom: var(--hairline) solid var(--hair);
+  vertical-align: top;
+}
+
+.roster__table tr:hover td {
+  background: var(--surface);
+}
+
+.roster__name {
+  font-size: var(--t-m);
+}
+
+.roster__email {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+/* One of these sits on every row, so it stays out of the way until it is the
+   thing you came looking for. */
+.roster__answers {
+  margin-top: 4px;
+  font-size: var(--t-xs);
+  color: var(--ink-faint);
+  line-height: 1.5;
+}
+
+.roster__answers div {
+  overflow-wrap: anywhere;
+}
+
+.roster__answers b {
+  font-weight: var(--w-medium);
+  color: var(--ink-muted);
+}
+
+.roster__proof {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: var(--s-1);
+  text-decoration: none;
+}
+
+.roster__proof:hover,
+.roster__proof:focus-visible {
+  color: var(--accent);
+}
+
+/* The number a volunteer types in when a camera will not read a screen. */
+.roster__ticket {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--ink-muted);
+}
+
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 100px;
+  border: var(--hairline) solid currentColor;
+  white-space: nowrap;
+}
+
+.pill[data-status='CHECKED_IN'] { color: var(--green-bright); }
+.pill[data-status='ISSUED'] { color: var(--ink-muted); }
+.pill[data-status='UNDELIVERED'] { color: var(--terra-bright); }
+.pill[data-status='REVOKED'] { color: var(--ink-faint); }
+
+/* --- staff sheet ------------------------------------------------------------ */
+
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: var(--s-5);
+  background: rgba(10, 9, 8, 0.8);
+  animation: fade var(--fast) var(--ease) both;
+}
+
+.sheet[hidden] {
+  display: none;
+}
+
+.sheet__panel {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius-lg);
+  padding: var(--s-6);
+  box-shadow: var(--shadow);
+  animation: rise var(--mid) var(--ease) both;
+}
+
+.sheet__title {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-l);
+  letter-spacing: -0.01em;
+}
+
+.sheet__note {
+  color: var(--ink-muted);
+  font-size: var(--t-s);
+  margin-top: var(--s-2);
+}
+
+.sheet__actions {
+  display: flex;
+  gap: var(--s-3);
+  justify-content: flex-end;
+  margin-top: var(--s-6);
+}

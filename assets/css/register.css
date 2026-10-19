@@ -1,0 +1,698 @@
+/* Registration. Ivory paper, one ink band at the top, the ticket beside the form. */
+
+/* --- masthead -------------------------------------------------------------
+   The ticket's own header at poster scale, so the artifact that lands in your
+   inbox is recognisably the page you filled in. It carries its own slow light,
+   and the edition number is set large enough to be a shape rather than a fact. */
+
+.masthead {
+  position: relative;
+  overflow: hidden;
+  background: var(--header-bg, var(--ink-900));
+  color: var(--header-text, var(--ivory));
+  padding: var(--s-8) var(--s-5) var(--s-7);
+  isolation: isolate;
+}
+
+.masthead::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  background:
+    radial-gradient(36vw 36vw at 10% 6%, rgba(240, 115, 63, 0.26), transparent 62%),
+    radial-gradient(42vw 42vw at 92% 96%, rgba(110, 217, 166, 0.10), transparent 66%);
+  animation: drift var(--ambient) var(--ease-soft) infinite alternate;
+}
+
+/* Cut off by the edge on purpose: it reads as printing, not as a headline. */
+.masthead__numeral {
+  position: absolute;
+  right: -0.08em;
+  bottom: -0.34em;
+  z-index: -1;
+  font-family: var(--font-display);
+  font-weight: var(--w-semi);
+  font-size: clamp(11rem, 34vw, 24rem);
+  line-height: 0.7;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(247, 243, 235, 0.14);
+  pointer-events: none;
+  user-select: none;
+}
+
+.masthead__inner {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.masthead .eyebrow {
+  color: var(--terra-bright);
+}
+
+.masthead__title {
+  margin: var(--s-4) 0 0;
+  max-width: 13ch;
+  animation: rise var(--slow) var(--ease) both;
+}
+
+.masthead__tagline {
+  font-family: var(--font-display);
+  font-weight: var(--w-regular);
+  font-size: var(--t-l);
+  line-height: 1.35;
+  color: var(--night-300);
+  margin-top: var(--s-4);
+  max-width: 30ch;
+  animation: rise var(--slow) var(--ease) 90ms both;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-5);
+  margin: var(--s-7) 0 0;
+  padding-top: var(--s-5);
+  border-top: var(--hairline) solid rgba(247, 243, 235, 0.18);
+  max-width: 800px;
+  animation: rise var(--slow) var(--ease) 180ms both;
+}
+
+.facts__item dd {
+  margin-top: var(--s-2);
+  font-size: var(--t-s);
+  color: var(--ivory);
+}
+
+.facts .label {
+  color: var(--night-500);
+}
+
+@media (min-width: 620px) {
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* --- registration state ---------------------------------------------------
+   No seat count: how many people come is not decided in advance. The only fact
+   worth stating is whether the form is still taking responses. */
+
+.status-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+  padding: 7px 14px 7px 12px;
+  border: var(--hairline) solid rgba(247, 243, 235, 0.2);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  color: var(--night-300);
+  animation: rise var(--slow) var(--ease) 260ms both;
+}
+
+.status-line__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--night-500);
+  flex: 0 0 auto;
+}
+
+.status-line[data-state='open'] .status-line__dot {
+  background: var(--green-bright);
+  animation: ping 3.4s var(--ease-soft) infinite;
+}
+
+.status-line[data-state='closed'] .status-line__dot {
+  background: var(--terra-bright);
+}
+
+@keyframes ping {
+  0% { box-shadow: 0 0 0 0 rgba(110, 217, 166, 0.5); }
+  70%, 100% { box-shadow: 0 0 0 10px rgba(110, 217, 166, 0); }
+}
+
+/* --- stage ---------------------------------------------------------------- */
+
+.stage {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--s-8) var(--s-5) var(--s-9);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-8);
+}
+
+@media (min-width: 940px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr) 366px;
+    gap: var(--s-9);
+    align-items: start;
+  }
+}
+
+/* --- closed --------------------------------------------------------------- */
+
+.closed[hidden] {
+  display: none;
+}
+
+.closed__title {
+  max-width: 12ch;
+}
+
+.closed__note {
+  margin-top: var(--s-4);
+}
+
+/* --- steps ----------------------------------------------------------------
+   A rail down the left with a numbered marker per step: the sequence is visible
+   without any step having to say "next". */
+
+.steps[hidden] {
+  display: none;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: var(--s-5);
+  padding-bottom: var(--s-8);
+}
+
+.step__index {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.step__index span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: var(--hairline) solid var(--hair);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  transition: color var(--mid) var(--ease), border-color var(--mid) var(--ease);
+}
+
+/* The rail. It runs between markers and stops at the last one. */
+.step::before {
+  content: '';
+  position: absolute;
+  left: calc(1.375rem - 0.5px);
+  top: 2.25rem;
+  bottom: var(--s-5);
+  width: 1px;
+  background: var(--hair);
+}
+
+.step:last-of-type::before {
+  display: none;
+}
+
+.step:focus-within .step__index span {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.step__title {
+  margin: 0;
+  padding-top: 4px;
+}
+
+.step__note {
+  color: var(--ink-muted);
+  margin-top: var(--s-1);
+  max-width: 44ch;
+}
+
+.step__fineprint {
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+  margin-top: var(--s-4);
+}
+
+.step__body > .btn {
+  margin-top: var(--s-6);
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* --- payment --------------------------------------------------------------- */
+
+.pay {
+  margin-top: var(--s-5);
+}
+
+.pay__qr {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-5);
+  background: var(--surface);
+  border: var(--hairline) solid var(--hair);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.pay__qr img {
+  width: 150px;
+  height: 150px;
+  background: #fff;
+  padding: 6px;
+  border-radius: var(--radius);
+  flex: 0 0 auto;
+}
+
+.pay__qr figcaption {
+  min-width: 0;
+}
+
+.vpa {
+  display: block;
+  margin-top: var(--s-2);
+  font-size: var(--t-m);
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-bottom: var(--hairline) dashed var(--hair);
+  padding: 0 0 5px;
+  cursor: pointer;
+  word-break: break-all;
+  text-align: left;
+  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.vpa:hover {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+.vpa[data-copied='true'] {
+  color: var(--ok);
+  border-bottom-color: var(--ok);
+}
+
+.pay__hint {
+  display: block;
+  margin-top: var(--s-2);
+  font-size: var(--t-s);
+  color: var(--ink-faint);
+}
+
+@media (max-width: 560px) {
+  .pay__qr {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* --- proof upload ---------------------------------------------------------- */
+
+/* Sized to the thing it holds: a phone screenshot is tall, so the empty state is
+   tall too and nothing jumps when one lands in it. */
+.drop {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 176px;
+  margin-top: var(--s-2);
+  padding: var(--s-5);
+  border: var(--hairline) dashed var(--hair);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease),
+    box-shadow var(--fast) var(--ease);
+}
+
+.drop:hover,
+.drop:focus-within {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  box-shadow: var(--shadow-sm);
+}
+
+.drop__face {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+  position: relative;
+  z-index: 1;
+}
+
+.drop__mark {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: var(--hairline) solid var(--hair);
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  transition: background var(--mid) var(--ease), border-color var(--mid) var(--ease);
+}
+
+.drop__mark::before,
+.drop__mark::after {
+  content: '';
+  position: absolute;
+  background: var(--ink-muted);
+  transition: all var(--mid) var(--ease);
+}
+
+.drop__mark::before { width: 12px; height: 1.5px; }
+.drop__mark::after { width: 1.5px; height: 12px; }
+
+.drop__text {
+  color: var(--ink);
+  font-weight: var(--w-medium);
+}
+
+/* Once a file is chosen it fills the box, dimmed, with the filename over it —
+   proof that the right screenshot went in without opening anything. */
+.drop__thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.32) saturate(0.5);
+  animation: fade var(--mid) var(--ease) both;
+}
+
+.drop[data-state='filled'] {
+  border-style: solid;
+  border-color: var(--ink-900);
+  background: var(--ink-900);
+}
+
+.drop[data-state='filled'] .drop__text {
+  color: var(--ivory);
+}
+
+.drop[data-state='filled'] .drop__meta {
+  color: var(--night-300);
+}
+
+.drop[data-state='filled'] .drop__mark {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+/* The plus becomes a tick. */
+.drop[data-state='filled'] .drop__mark::before {
+  width: 12px;
+  height: 1.5px;
+  background: #fff;
+  transform: rotate(-45deg) translate(1px, 4px);
+}
+
+.drop[data-state='filled'] .drop__mark::after {
+  width: 1.5px;
+  height: 7px;
+  background: #fff;
+  transform: rotate(-45deg) translate(-4px, 1px);
+}
+
+.field[data-invalid='true'] .drop {
+  border-color: var(--bad);
+}
+
+/* --- form status ----------------------------------------------------------- */
+
+.form-status:empty {
+  display: none;
+}
+
+.form-status {
+  margin-top: var(--s-6);
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--radius-lg);
+  border: var(--hairline) solid var(--hair);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  animation: rise var(--mid) var(--ease) both;
+}
+
+.form-status[data-tone='error'] {
+  border-color: var(--bad);
+  background: var(--accent-wash);
+}
+
+.form-status[data-tone='ok'] {
+  border-color: var(--ok);
+}
+
+.form-status strong {
+  display: block;
+  font-weight: var(--w-medium);
+  color: var(--ink);
+}
+
+/* --- the ticket -------------------------------------------------------------
+   Display sizes resolve smaller inside a 366px card than across a masthead:
+   the same scale, measured for its container. */
+
+@media (min-width: 940px) {
+  .preview {
+    position: sticky;
+    top: var(--s-6);
+  }
+}
+
+.ticket {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: rise var(--slow) var(--ease) 140ms both;
+}
+
+.ticket__head {
+  position: relative;
+  overflow: hidden;
+  background: var(--header-bg, var(--ink-900));
+  color: var(--header-text, var(--ivory));
+  padding: var(--s-5) var(--s-5) var(--s-4);
+}
+
+.ticket__head::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(22vw 22vw at 16% 0%, rgba(240, 115, 63, 0.3), transparent 60%);
+  animation: drift var(--ambient) var(--ease-soft) infinite alternate;
+}
+
+.ticket__head > * {
+  position: relative;
+}
+
+.ticket__edition {
+  color: var(--terra-bright);
+}
+
+.ticket__event {
+  font-size: 1.75rem;
+  line-height: 1.1;
+  margin-top: var(--s-2);
+  color: var(--ivory);
+}
+
+.ticket__when {
+  font-size: var(--t-s);
+  color: var(--night-300);
+  margin-top: var(--s-3);
+}
+
+.ticket__dot {
+  color: var(--night-500);
+  padding: 0 2px;
+}
+
+.ticket__body {
+  padding: var(--s-5);
+}
+
+.ticket__name {
+  font-size: 1.625rem;
+  line-height: 1.15;
+  margin-top: var(--s-2);
+  min-height: 1.15em;
+  overflow-wrap: anywhere;
+  transition: color var(--mid) var(--ease);
+}
+
+.ticket__name[data-empty='true'] {
+  color: var(--ink-faint);
+}
+
+.ticket__facts {
+  display: flex;
+  gap: var(--s-5);
+  margin-top: var(--s-5);
+  padding-top: var(--s-4);
+  border-top: var(--hairline) solid var(--hair);
+}
+
+.ticket__facts > div {
+  flex: 1;
+}
+
+.ticket__facts p:last-child {
+  margin-top: var(--s-2);
+  font-size: var(--t-s);
+}
+
+/* Real die-cut notches, not a dotted border. */
+.ticket__perf {
+  position: relative;
+  height: 26px;
+}
+
+.ticket__perf::before,
+.ticket__perf::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.ticket__perf::before { left: -12px; }
+.ticket__perf::after { right: -12px; }
+
+.ticket__perf span {
+  position: absolute;
+  top: 12px;
+  left: 18px;
+  right: 18px;
+  border-top: var(--hairline) dashed var(--hair);
+  transform-origin: left center;
+  animation: tear var(--slow) var(--ease) 320ms both;
+}
+
+@keyframes tear {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* The stub: the part that gets torn off and scanned. Hatched, so it reads as a
+   different piece of paper from the half above it. */
+.ticket__stub {
+  padding: var(--s-4) var(--s-5) var(--s-6);
+  display: grid;
+  place-items: center;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 7px,
+    rgba(25, 21, 18, 0.022) 7px 14px
+  );
+}
+
+.ticket__qr {
+  width: 172px;
+  height: 172px;
+  display: grid;
+  place-items: center;
+  padding: var(--s-2);
+  background: var(--surface);
+  border: var(--hairline) dashed var(--hair);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.ticket__qr img {
+  width: 100%;
+  height: 100%;
+  animation: settle var(--slow) var(--ease) both;
+}
+
+@keyframes settle {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+.ticket__qr-hint {
+  max-width: 9ch;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.ticket[data-state='issued'] .ticket__qr {
+  border-style: solid;
+  border-color: var(--hair);
+  background: #fff;
+}
+
+/* The number staff read out when a camera will not cooperate, so it is set to be
+   read out: mono, tracked, and the largest thing on the stub. */
+.ticket__idlabel {
+  margin-top: var(--s-5);
+}
+
+.ticket__id {
+  font-size: var(--t-l);
+  font-weight: var(--w-medium);
+  letter-spacing: var(--track-id);
+  margin-top: var(--s-1);
+  color: var(--ink-faint);
+  transition: color var(--mid) var(--ease);
+}
+
+.ticket[data-state='issued'] .ticket__id {
+  color: var(--ink);
+}
+
+.ticket__status:empty {
+  display: none;
+}
+
+.ticket__status {
+  padding: var(--s-3) var(--s-5);
+  border-top: var(--hairline) solid var(--hair);
+  background: var(--accent-wash);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+  animation: fade var(--slow) var(--ease) both;
+}
+
+/* --- footer ---------------------------------------------------------------- */
+
+.footer {
+  border-top: var(--hairline) solid var(--hair);
+  padding: var(--s-6) var(--s-5) var(--s-8);
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: var(--t-s);
+}

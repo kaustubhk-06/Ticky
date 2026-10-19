@@ -1,0 +1,427 @@
+/* Reset, primitives, and the pieces all three pages share. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-m);
+  font-weight: var(--w-regular);
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+dd {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+/* Numbers never jitter as a live count ticks. */
+.mono,
+input,
+output,
+time,
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- the ambient field ----------------------------------------------------
+   Two very large, very slow washes of colour behind everything. At this speed
+   nothing is ever seen to move; the page just isn't quite the same when you
+   look back at it. Fixed, so scrolling reveals it rather than dragging it. */
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -2;
+  background:
+    radial-gradient(40vw 40vw at 16% 10%, var(--glow-a), transparent 66%),
+    radial-gradient(46vw 46vw at 88% 82%, var(--glow-b), transparent 68%);
+  animation: drift var(--ambient) var(--ease-soft) infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to { transform: translate3d(3%, 2%, 0) scale(1.12); }
+}
+
+/* The two shared arrivals: something settling into place, and something simply
+   appearing. Every page uses one or both. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Paper tooth. Enough to stop large flat areas from looking like a screenshot
+   of a colour swatch, not enough to notice as texture. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- type primitives ------------------------------------------------------ */
+
+/* The only uppercase in the system. Mono, tracked out, always small — these are
+   captions on data, and they are never the thing being read. */
+.label,
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--accent);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: var(--w-semi);
+  font-size: var(--t-xl);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+
+/* Fraunces has an optical-size axis; at display sizes it wants the high end and
+   a touch of its softness, which is what keeps it warm rather than stern. */
+.display,
+.serif {
+  font-variation-settings: 'SOFT' 24, 'WONK' 1;
+}
+
+.serif {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  letter-spacing: -0.01em;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--w-medium);
+  font-size: var(--t-l);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  font-size: var(--t-m);
+  color: var(--ink-muted);
+  max-width: var(--measure);
+}
+
+.rule {
+  border: 0;
+  border-top: var(--hairline) solid var(--hair);
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* --- reveal ---------------------------------------------------------------
+   Sections arrive as you reach them. Small distance, no stagger inside a block:
+   the point is that the page feels alive, not that it performs. */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease);
+}
+
+[data-reveal='in'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- buttons --------------------------------------------------------------- */
+
+.btn {
+  font-family: var(--font-body);
+  font-size: var(--t-m);
+  font-weight: var(--w-medium);
+  line-height: 1.2;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius);
+  padding: 16px 26px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease),
+    color var(--fast) var(--ease), transform var(--fast) var(--ease),
+    box-shadow var(--fast) var(--ease);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Ink, not accent. A button already looks like a button; spending the accent on
+   it would leave nothing to say "this is the thing that matters". */
+.btn--primary {
+  background: var(--btn-primary-bg, var(--ink-900));
+  color: var(--btn-primary-text, var(--ivory));
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--primary:hover {
+  filter: brightness(1.08);
+}
+
+/* A slow sheen crossing the primary action on hover — the one flourish. */
+.btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 40%, rgba(247, 243, 235, 0.18) 50%, transparent 60%);
+  transform: translateX(-120%);
+  transition: transform var(--slow) var(--ease-soft);
+}
+
+.btn--primary:hover::after {
+  transform: translateX(120%);
+}
+
+[data-theme='night'] .btn--primary {
+  background: var(--btn-primary-bg, var(--night-100));
+  color: var(--btn-primary-text, var(--night-900));
+}
+
+[data-theme='night'] .btn--primary:hover {
+  filter: brightness(1.06);
+}
+
+.btn--quiet {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--hair);
+}
+
+.btn--quiet:hover {
+  border-color: var(--ink-muted);
+  background: var(--surface-sunk);
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Disabled because the job is done, not because it is unavailable — dimming it
+   would read as something having gone wrong. */
+.btn[data-done] {
+  opacity: 1;
+  cursor: default;
+  background: var(--ok);
+  border-color: var(--ok);
+  color: var(--ivory-raised);
+}
+
+.btn--block {
+  display: block;
+  width: 100%;
+}
+
+/* --- focus --------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* --- fields ---------------------------------------------------------------
+   Underlines rather than boxes. A stack of rounded rectangles is the single
+   most recognisable shape of a form nobody thought about. */
+
+.field {
+  display: block;
+  margin-top: var(--s-5);
+}
+
+/* `display: block` above beats the browser's own [hidden] rule, since author
+   CSS always wins over the user-agent stylesheet at equal specificity — so a
+   field toggled hidden via JS would otherwise stay visible. */
+.field[hidden] {
+  display: none;
+}
+
+.field > .label {
+  display: block;
+  margin-bottom: var(--s-1);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--t-m);
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-bottom: var(--hairline) solid var(--hair);
+  border-radius: 0;
+  padding: 10px 2px;
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--ink-faint);
+}
+
+/* The underline thickens into the accent on focus: one line moving, rather than
+   a glowing box appearing. */
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+  box-shadow: 0 1px 0 0 var(--accent);
+}
+
+.field:focus-within > .label {
+  color: var(--accent);
+}
+
+.field[data-invalid='true'] input,
+.field[data-invalid='true'] select,
+.field[data-invalid='true'] textarea {
+  border-bottom-color: var(--bad);
+}
+
+/* A question answered yes/no rather than typed — no underline to thicken. */
+.field--checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.field--checkbox input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  accent-color: var(--accent);
+}
+
+.field--checkbox > .label {
+  margin-bottom: 0;
+}
+
+/* A question answered by picking any number of options. */
+.field--group {
+  border: 0;
+  padding: 0;
+  margin: var(--s-5) 0 0;
+}
+
+.field--group > legend.label {
+  display: block;
+  margin-bottom: var(--s-2);
+  padding: 0;
+}
+
+.field--group[data-invalid='true'] > legend.label {
+  color: var(--bad);
+}
+
+.field--group-option {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 7px 0;
+  cursor: pointer;
+}
+
+.field--group-option input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  accent-color: var(--accent);
+}
+
+.field-error:empty {
+  display: none;
+}
+
+.field-error {
+  display: block;
+  font-size: var(--t-s);
+  color: var(--bad);
+  margin-top: var(--s-2);
+  animation: fade var(--fast) var(--ease) both;
+}
+
+/* --- motion, opt-out ------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

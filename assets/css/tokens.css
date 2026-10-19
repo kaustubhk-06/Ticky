@@ -1,0 +1,177 @@
+/* OS Days design tokens. DESIGN.md explains why each of these is what it is. */
+
+:root {
+  /* --- palette ----------------------------------------------------------
+     Warm through the whole range: the paper is ivory rather than white, the
+     black has brown in it, and the accent is a fired terracotta. Nothing here
+     is grey — grey is what a palette looks like when nobody chose it.
+
+     Every text pairing below is at least 4.5:1 on the surface it sits on,
+     including the faint tones, which is the pair most systems get wrong. */
+
+  --ivory: #f7f3eb;
+  --ivory-raised: #fffdf8;
+  --ivory-sunk: #efe8db;
+  --hair-day: #e3dacb;
+
+  --ink-900: #191512;   /* 16.4:1 on ivory */
+  --ink-700: #302a24;
+  --ink-500: #4a443e;   /*  8.1:1 */
+  --ink-300: #6b645e;   /*  5.1:1 */
+
+  --night-900: #141210;
+  --night-800: #1d1916;
+  --night-950: #0e0c0b;
+  --night-hair: #302a25;
+  --night-100: #f2ece2;
+  --night-300: #a8a096; /*  7.3:1 on night */
+  --night-500: #8a8177; /*  4.9:1 */
+
+  --terra: #b4441f;        /* 4.9:1 on ivory */
+  --terra-bright: #f0733f; /* 6.4:1 on night */
+  --terra-wash: #f6e6dd;
+
+  --green: #2f6b4f;
+  --green-bright: #6ed9a6;
+
+  /* --- type -------------------------------------------------------------
+     Fraunces for anything that carries the voice, Instrument Sans for anything
+     that carries instructions, IBM Plex Mono for anything that carries data.
+
+     Five steps and a hero. The earlier revision ran on three, which turned out
+     to be one constraint too many: with headings the same size as body text the
+     pages read as unstyled rather than as restrained. Nothing is set heavier
+     than 600, and the display face is soft enough that 600 reads as warm rather
+     than as loud. */
+
+  --font-display: 'Fraunces', 'Iowan Old Style', Palatino, Georgia, serif;
+  --font-body: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  --t-xs: 0.75rem;                            /* mono labels, always small  */
+  --t-s: 0.875rem;                            /* meta, captions, fine print */
+  --t-m: 1rem;                                /* everything you read        */
+  --t-l: 1.375rem;                            /* section and step titles    */
+  --t-xl: clamp(2.25rem, 5.4vw, 3.5rem);      /* the title of a page        */
+  --t-hero: clamp(3.25rem, 10vw, 5.75rem);    /* one number, one verdict    */
+
+  --w-regular: 400;
+  --w-medium: 500;
+  --w-semi: 600;
+
+  --track-label: 0.18em;
+  --track-id: 0.14em;
+
+  /* --- space -------------------------------------------------------------
+     A 4px base, doubling. Layouts live in the top half of the scale; the air
+     is doing as much work as the ink. */
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 72px;
+  --s-9: 112px;
+
+  /* --- form -------------------------------------------------------------- */
+  --radius: 4px;
+  --radius-lg: 10px;
+  --hairline: 1px;
+  --measure: 56ch;
+
+  /* --- motion ------------------------------------------------------------
+     One curve for interface response, one for anything that drifts behind it.
+     Ambient motion is too slow to watch on purpose. */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --fast: 150ms;
+  --mid: 340ms;
+  --slow: 640ms;
+  --ambient: 32s;
+}
+
+/* Day surface — registration and the ticket. Read on a phone, in daylight. */
+[data-theme='day'] {
+  --bg: var(--ivory);
+  --surface: var(--ivory-raised);
+  --surface-sunk: var(--ivory-sunk);
+  --ink: var(--ink-900);
+  --ink-muted: var(--ink-500);
+  --ink-faint: var(--ink-300);
+  --hair: var(--hair-day);
+  --accent: var(--terra);
+  --accent-wash: var(--terra-wash);
+  --ok: var(--green);
+  --bad: var(--terra);
+  --header-bg: var(--ink-900);
+  --header-text: var(--ivory);
+  --btn-primary-bg: var(--ink-900);
+  --btn-primary-text: var(--ivory);
+  --shadow-sm: 0 1px 2px rgba(25, 21, 18, 0.06), 0 8px 20px -16px rgba(25, 21, 18, 0.35);
+  --shadow: 0 1px 0 var(--hair-day), 0 28px 60px -34px rgba(25, 21, 18, 0.45);
+  --glow-a: rgba(180, 68, 31, 0.11);
+  --glow-b: rgba(47, 107, 79, 0.07);
+}
+
+/* Night surface — the door and the dashboard. Used in a dim room after 6pm. */
+[data-theme='night'] {
+  --bg: var(--night-900);
+  --surface: var(--night-800);
+  --surface-sunk: var(--night-950);
+  --ink: var(--night-100);
+  --ink-muted: var(--night-300);
+  --ink-faint: var(--night-500);
+  --hair: var(--night-hair);
+  --accent: var(--terra-bright);
+  --accent-wash: rgba(240, 115, 63, 0.12);
+  --ok: var(--green-bright);
+  --bad: var(--terra-bright);
+  --header-bg: var(--night-950);
+  --header-text: var(--night-100);
+  --btn-primary-bg: var(--night-100);
+  --btn-primary-text: var(--night-900);
+  --shadow-sm: 0 8px 20px -16px rgba(0, 0, 0, 0.9);
+  --shadow: 0 28px 60px -34px rgba(0, 0, 0, 0.95);
+  --glow-a: rgba(240, 115, 63, 0.16);
+  --glow-b: rgba(110, 217, 166, 0.09);
+}
+
+/* Space surface — one week's theme on the registration page only. An
+   observatory almanac, not sci-fi clip art: a night-indigo chart with one
+   warm ember accent, same "one colour, spent carefully" rule as every other
+   edition. The violet in --glow-b is ambient only — it never marks anything
+   a person has to read, so it doesn't count against that rule. */
+[data-theme='space'] {
+  --void: #0b0e1a;
+  --void-raised: #141a2e;
+  --void-sunk: #080a13;
+  --void-hair: #262c47;
+  --star: #f3efe4;
+  --star-dim: #9294b0;
+  --star-faint: #5c5f7d;
+  --comet: #ff6a3d;
+  --comet-dim: #d94f26;
+
+  --bg: var(--void);
+  --surface: var(--void-raised);
+  --surface-sunk: var(--void-sunk);
+  --ink: var(--star);
+  --ink-muted: var(--star-dim);
+  --ink-faint: var(--star-faint);
+  --hair: var(--void-hair);
+  --accent: var(--comet);
+  --accent-wash: rgba(255, 106, 61, 0.14);
+  --ok: var(--green-bright);
+  --bad: var(--comet);
+  --header-bg: var(--void-sunk);
+  --header-text: var(--star);
+  --btn-primary-bg: var(--star);
+  --btn-primary-text: var(--void);
+  --shadow-sm: 0 8px 20px -16px rgba(0, 0, 0, 0.9);
+  --shadow: 0 28px 70px -30px rgba(0, 0, 0, 0.85);
+  --glow-a: rgba(255, 106, 61, 0.13);
+  --glow-b: rgba(91, 79, 207, 0.16);
+}
